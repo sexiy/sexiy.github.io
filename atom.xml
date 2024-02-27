@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://sexiy.github.io</id>
+    <title>Gridea</title>
+    <updated>2024-02-27T04:38:04.044Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://sexiy.github.io"/>
+    <link rel="self" href="https://sexiy.github.io/atom.xml"/>
+    <subtitle>温故而知新</subtitle>
+    <logo>https://sexiy.github.io/images/avatar.png</logo>
+    <icon>https://sexiy.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2024, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[P4 tutorials]]></title>
+        <id>https://sexiy.github.io/post/p4-tutorials/</id>
+        <link href="https://sexiy.github.io/post/p4-tutorials/">
+        </link>
+        <updated>2024-02-26T02:06:16.000Z</updated>
+        <content type="html"><![CDATA[<h4 id="隧道技术">隧道技术</h4>
+<blockquote>
+<p>隧道技术主要有两方面收获，一方面是控制平面的知识，一方面是P4编程的知识。<br>
+遗留问题：如何理解和编写header.py?</p>
+</blockquote>
+<h5 id="控制平面的知识">控制平面的知识</h5>
+<ol>
+<li>控制平面提供table的条目和参数：P4 程序定义了数据包处理流水线，但每个表中的规则都是由控制平面插入的。当某个规则与数据包匹配时，就会调用该规则的动作，而控制平面提供的参数则是规则的一部分。</li>
+<li>交换机规则的配置文件是sX-runtime.json：在练习中，我们已经添加了必要的静态控制平面条目。作为启动 Mininet 实例的一部分，make run 命令将在每个交换机的表中安装数据包处理规则。这些规则定义在 sX-runtime.json 文件中，其中 X 对应交换机编号。</li>
+<li>P4 程序中添加或重命名表、键或操作的任何更改都需要反映在这些 sX-runtime.json 文件中</li>
+</ol>
+<h5 id="p4编程的知识">P4编程的知识</h5>
+<ol>
+<li>完成有header和没header都能转发：basic_tunnel.p4 交换机的完整实现将能够根据自定义封装头的内容进行转发，以及在数据包中不存在封装头的情况下执行正常的 IP 转发。</li>
+<li>定义tunnel表和forward表，根据valid进行apply：更新 MyIngress 控制块中的应用语句，如果 myTunnel 标头有效，则应用新定义的 myTunnel_exact 表。否则，如果 ipv4 标头有效，则调用 ipv4_lpm 表。根据valid选择适用的表，而表项由控制平面控制，无须担心。</li>
+<li>按照顺序emit即可：valid()是路由器隐藏的有效位，可以通过Isvalid进行询问，但其值在解析时已经确定。而emit操作，可以直接按照理想中的顺序进行；如果无效，会自动缺省</li>
+<li>正常发包：以太网头、IP 头、TCP 头和报文<br>
+隧道发包：以太网头、隧道头、IP 头、TCP 头和报文组成。</li>
+<li>Python Scapy 本身并不支持 myTunnel 头信息类型，因此我们提供了一个名为 myTunnel_header.py 的文件，为我们的新自定义头信息添加 Scapy 支持。如果您有兴趣了解如何使用该文件，请随时查看。<strong>每一个INT的，都应该增加该header.py</strong></li>
+</ol>
+<h4 id="ecn拥塞控制">ECN拥塞控制</h4>
+<blockquote>
+<p>收获：mininet对host的指令的学习，对修改数据包的学习<br>
+该拥塞控制仅支持对数据包进行修改，不对数据包进行更改{这里是不是隐含着，只在交换机端进行操作}</p>
+</blockquote>
+<h5 id="mininet对发包指令的知识">mininet对发包指令的知识</h5>
+<ol>
+<li>h22 启动iperf UDP server ： “iperf -s -u”</li>
+<li>在h11持续发送15s iperf高速数据包 “iperf -c 10.0.2.22 -t 15 -u”</li>
+<li>在h1每秒发送一个数据包持续30秒 ./send.py 10.0.2.2 &quot;P4 is cool&quot; 30</li>
+<li>为方便跟踪 tos 值，您可能需要将 h2 的输出重定向到一个文件，为 h2 运行以下命令<br>
+“./receive.py &gt; h2.log”</li>
+</ol>
+<h5 id="对修改数据包的学习">对修改数据包的学习</h5>
+<p>数据包修改的代码及其类似c++</p>
+<h5 id="对拓扑构建的学习">对拓扑构建的学习</h5>
+<p>host的构建时，可以声明对应端口名称，和对应端口的默认路由、对应端口的ip-mac映射。该端口的声明影响send.py程序的编写</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[法律方法]]></title>
+        <id>https://sexiy.github.io/post/fa-lu-fang-fa/</id>
+        <link href="https://sexiy.github.io/post/fa-lu-fang-fa/">
+        </link>
+        <updated>2024-02-20T06:56:13.000Z</updated>
+        <summary type="html"><![CDATA[<p>🍈&gt;法律方法，从学科内容上看，可以说是法解释方法，如何将抽象的法转变为具体的法，如何将法律转变为可说理、可诉说的法。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>🍈&gt;法律方法，从学科内容上看，可以说是法解释方法，如何将抽象的法转变为具体的法，如何将法律转变为可说理、可诉说的法。</p>
+<!-- more -->
+<p>法律方法涉及很多基础性的知识，如：法律是指应用法律，抑或称之为活法；法学则为研究法学，进行论文写作。而某与某论则涉及到是否成体系化。但是，对于法律方法，或称法学方法，或称法学方法论，又或称法学逻辑等等，异常混乱和争议。</p>
+<p>在司法裁判中，存在司法能动主义和司法克制主义两大派系。虽然过往主流是司法克制主义，但是现在最高法无论在审理案件，还是在说明案理方面，都更加注重司法能动主义，关注价值衡量、实质推理和法律论证，不再单抓司法三段论不放，这是法学研究者应该注意的。</p>
+<p>而从名称上得到借鉴的经验，法律解释学，本质上还是要借鉴司法三段论的形式，主要关注大前提，落到论文写作中，更要重视法律方法论而不是立法论，毕竟，你的老师们，写的立法建议，都毫无意义，你写的更是了。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[可编程路由器 时间进度]]></title>
+        <id>https://sexiy.github.io/post/ke-bian-cheng-lu-you-qi-shi-jian-jin-du/</id>
+        <link href="https://sexiy.github.io/post/ke-bian-cheng-lu-you-qi-shi-jian-jin-du/">
+        </link>
+        <updated>2024-02-19T09:48:41.000Z</updated>
+        <content type="html"><![CDATA[<p>2月19日<br>
+找到关于mininet命令的文档，我记忆中sdnlab中存在。<br>
+遇到pod-topology，但不知道它是什么</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[youtube中 closed loop automation]]></title>
+        <id>https://sexiy.github.io/post/youtube-zhong-closed-loop-automation/</id>
+        <link href="https://sexiy.github.io/post/youtube-zhong-closed-loop-automation/">
+        </link>
+        <updated>2024-02-12T15:38:54.000Z</updated>
+        <content type="html"><![CDATA[<p>Using YANG Models and Telemetry for Closed Loop Applications by Craig Hill</p>
+<p>提到了closed loop automation，涉及南向和北向两类应用。提出工作可以是1. 优化对象提取的速度；2. 北向应用如何实际利用提取的数据，需要应用来做。<br>
+<img src="https://sexiy.github.io/post-images/1707752429444.png" alt="" loading="lazy"><br>
+QoS 移动流量和更改缓冲区<br>
+<img src="https://sexiy.github.io/post-images/1707752434624.png" alt="" loading="lazy"></p>
+<p>疑惑：南向和北向是什么？现在的闭环该做什么？</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[机试知识]]></title>
+        <id>https://sexiy.github.io/post/ji-shi-zhi-shi/</id>
+        <link href="https://sexiy.github.io/post/ji-shi-zhi-shi/">
+        </link>
+        <updated>2024-02-08T18:21:48.000Z</updated>
+        <content type="html"><![CDATA[<p>[TOC]<br>
+对于机试的学习还非常的不充分，知识还很碎片化，所以对于其的整理都总结如下：</p>
+<h4 id="输入输出">输入输出</h4>
+<pre><code>ios::sync_with_stdio(false); cin.tie(0);cout.tie(0);
+</code></pre>
+<p>对于每一个代码都应该增加这一句，避免大输入的时候超时，对于输出默认为NULL，所以冗余的声明是没有必要的，但是对于考试避免出错，适当的冗余是非常有必要的。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[我的剖析]]></title>
+        <id>https://sexiy.github.io/post/wo-de-pou-xi/</id>
+        <link href="https://sexiy.github.io/post/wo-de-pou-xi/">
+        </link>
+        <updated>2024-02-08T17:39:30.000Z</updated>
+        <content type="html"><![CDATA[<p>🐶对于今天的外出，我是有收获的，清晰地认识到了自己是喜欢于朋友前显摆，却又明显知道自己的不能如此，必然出丑；清爽地风儿铺面而来，我清晰的知道，对于学习新知识、掌握新技能，内心的喜悦感和幸福感透着尾椎骨直冲天灵盖，却又常常于纷纷扰扰中沉迷。</p>
+<p>到目前为止我的一生，我的大的、小的成功，都是有迹可循的，不外乎付出心血和努力；我的失败也不是无从觅迹的，多半诱惑而致。从初中开始，我看网络小说、我打游戏，还不算太糟糕，一方面是因为我对于知识领悟能力足够，另一方面是由于我对知识有天然的性冲动，再次，知识的体量不算太大，课堂的时间足以我完成相应的消化和理解，这份消化和理解是深层次的，不免有些优越。</p>
+<p>从小到大的学习，我有一个一以贯之的缺点——不体系化，常常在所有知识学习完成后，才被动地整理，形成一个浑圆的整体，才显露出我的能力。这从我的成长路线能够很好的看出来，我在1-5年级平平无奇，我在初1-初2平平无奇，我在高1上平平无奇，很多的崭露头角和脱颖而出并不是意外和契机，只是因为我懂得多了，在潜意识里进行了整理。这份整理应该来的更早，更系统，这也是我的博客创始的初衷！</p>
+<p>🐶睡觉是我最爱的事情！</p>
+<p>但是，对于时间的控制和对自己的控制还不足。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[可编程路由器完成度 进度]]></title>
+        <id>https://sexiy.github.io/post/ke-bian-cheng-lu-you-qi-jin-du/</id>
+        <link href="https://sexiy.github.io/post/ke-bian-cheng-lu-you-qi-jin-du/">
+        </link>
+        <updated>2024-02-04T12:03:39.000Z</updated>
+        <content type="html"><![CDATA[<p><a name="Mark"></a></p>
+<h4 id="任务安排">任务安排</h4>
+<ol>
+<li>p4编程</li>
+<li>INT规范和代码，先完成官方文档的阅读</li>
+<li>闭环论文查找：ACM网络测量大会</li>
+</ol>
+<p>https://p4.org/specs/：这个网站给出了P4、Runtime、可移植NIC体系结构、便携式交换机体系结构、带内遥测框架、遥测报告格式等官方文件，只维护到2020年<br>
+https://gitlab.ethz.ch/nsg/public/adv-net-2023-exercises/-/tree/main/2-Programmability<br>
+<a href="#Mark">Your text</a></p>
+<h3 id="1-p4编程">1 P4编程</h3>
+<p>1、P4 与 OpenFlow 的关联与区别<br>
+P4虽然弥补了OpenFlow的不足，但是P4和OpenFlow的定位是截然不同的！ OpenFlow提供了一种控制器和数据面的动态交互的协议。是一种南向协议。而P4只是一个数据面的编程语言。<br>
+通过P4，我们可以定义各种各样形状的积木，而通过南向协议，我们可以组装这些积木来实现特定的功能。也就是说，写好P4代码并不是全部，我们还需要写相应的控制面代码才能使网络正常工作。<br>
+<strong>与OpenFlow对应的是P4 Runtime</strong>。 还记的上面的那张图吗，为了实现协议无关。P4的设计者们还提供了一个南向协议——P4 runtime。 P4 runtime与OpenFlow功能类似，但是P4 runtime可以充分利用P4协议无关的特性，”与P4更搭配！“。<br>
+2、控制平面和数据平面的关系<br>
+虽然说官方为了让大家专注于数据面编程，已经给好了控制面指令，但是我们有必要查看一下他们，从而有了更深入的理解, 查看 s[1,2,3]-runtime.json， 里面定义了很多流表项。以s1-runtime.json为例, 具体的一条流表项为：<br>
+{<br>
+&quot;table&quot;: &quot;MyIngress.ipv4_lpm&quot;,<br>
+&quot;match&quot;: {<br>
+&quot;hdr.ipv4.dstAddr&quot;: [&quot;10.0.1.1&quot;, 32]<br>
+},<br>
+&quot;action_name&quot;: &quot;MyIngress.ipv4_forward&quot;,<br>
+&quot;action_params&quot;: {<br>
+&quot;dstAddr&quot;: &quot;00:00:00:00:01:01&quot;,<br>
+&quot;port&quot;: 1<br>
+}<br>
+}<br>
+回想，table name 就是我们在p4代码中自定义的转发表。匹配域也依照了我们自定义的代码。而动作也按照我们编写的动作代码传入了相应的参数。将所有的流表项汇总一下, 我绘制了下面的图片:<br>
+<img src="https://sexiy.github.io/post-images/1707244147786.jpg" alt="" loading="lazy"><br>
+看到这一步，我们便了然了。数据面定义了转发表，而控制面下发了具体匹配转发的流表项，使得这三个主机可以互通。而在控制面下发的流表项与我们p4代码中定义的流表结构息息相关。<br>
+总结起来，是：<strong>数据平面定义了数据结构，控制平面将具体参数依照结构进行传递！</strong><br>
+3、各个组件的作用<br>
+对于INT各个组件都有自己的作用，而对于P4各个组件也都有自己的作用，将各个组件的总用总结的此处。</p>
+<ol>
+<li>Mininet 环境<br>
+Mininet 创建一个真实的虚拟网络，在一台机器上运行实际的内核、交换机和应用程序代码。<br>
+多亏了 P4-Utils，我们的练习不需要与 Mininet 直接交互。<br>
+当我们需要了解特定的 Mininet CLI 命令时，我们将在练习中介绍它们。<br>
+简而言之，Mininet 使用 Unix 命名空间创建主机，并使用虚拟接口和 BMv2 交换机将它们互连。Linux 命名空间为在特定命名空间中运行的所有进程提供网络堆栈。因此，Mininet 等网络虚拟化工具使用 Linux 网络命名空间来实例化拓扑中的隔离节点（主机、交换机、路由器等）。</li>
+<li>控制平面<br>
+由于P4-Utils的最新更新，P4Runtime可以使用新的控制平面API。请注意，API（即 和 ） 由 P4-Utils 提供，而客户端（即 ）则由 BMv2 直接实现。<br>
+①table_set_default table_name drop<br>
+table_add table_name action_name 1 =&gt; 5<br>
+第一个命令将为表 设置默认操作和操作参数（在本例中为 none ）。因此，在使用表时，如果没有匹配项，将调用 drop 操作。在第二个示例中，命令添加一个匹配的条目，如果 等于 1，则执行操作，并将 设置为 5。<br>
+②使用P4-Utils配置文件 https://nsg-ethz.github.io/p4-utils/usage.html#json<br>
+https://nsg-ethz.github.io/p4-utils/index.html <strong>一定要读</strong><br>
+&quot;switches&quot;: {<br>
+&quot;s1&quot;: {<br>
+&quot;cli_input&quot;: &quot;&lt;path_to_cli_commands_file&gt;&quot;<br>
+}<br>
+}</li>
+</ol>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[楔子]]></title>
+        <id>https://sexiy.github.io/post/xie-zi/</id>
+        <link href="https://sexiy.github.io/post/xie-zi/">
+        </link>
+        <updated>2024-01-21T14:47:11.000Z</updated>
+        <summary type="html"><![CDATA[<p>对于撰写博客，是一名纯粹的新手，或许，想用小说的方式完成。这需要选择采用现实还是神学，为了让它更为有趣，也让我今后读起来更为有趣。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>对于撰写博客，是一名纯粹的新手，或许，想用小说的方式完成。这需要选择采用现实还是神学，为了让它更为有趣，也让我今后读起来更为有趣。</p>
+<!-- more -->
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[测试]]></title>
+        <id>https://sexiy.github.io/post/ce-shi/</id>
+        <link href="https://sexiy.github.io/post/ce-shi/">
+        </link>
+        <updated>2024-01-19T03:58:55.000Z</updated>
+        <content type="html"><![CDATA[<p>测试</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Hello Gridea]]></title>
+        <id>https://sexiy.github.io/post/hello-gridea/</id>
+        <link href="https://sexiy.github.io/post/hello-gridea/">
+        </link>
+        <updated>2018-12-11T16:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
+✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
+✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
+<!-- more -->
+<p><a href="https://github.com/getgridea/gridea">Github</a><br>
+<a href="https://gridea.dev/">Gridea 主页</a><br>
+<a href="https://fehey.com/">示例网站</a></p>
+<h2 id="特性">特性👇</h2>
+<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
+<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
+<p>🏷️  你可以对文章进行标签分组</p>
+<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
+<p>💻  你可以在 <strong>Windows</strong>，<strong>MacOS</strong> 或 <strong>Linux</strong> 设备上使用此客户端</p>
+<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
+<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
+<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
+<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
+<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
+<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前 🏃</p>
+<p>未来，它一定会成为你离不开的伙伴</p>
+<p>尽情发挥你的才华吧！</p>
+<p>😘 Enjoy~</p>
+]]></content>
+    </entry>
+</feed>
